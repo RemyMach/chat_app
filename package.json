@@ -1,0 +1,22 @@
+{
+  "name": "chat_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RemyMach/chat_app.git"
+  },
+  "author": "RemyMach",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RemyMach/chat_app/issues"
+  },
+  "homepage": "https://github.com/RemyMach/chat_app#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
