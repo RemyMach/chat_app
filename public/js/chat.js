@@ -38,8 +38,6 @@ socket.on('message', (message) => {
     console.log(message)
 })
 
-socket.on('location', (coord) => {
-    console.log('longitude: ' + coord.longitude)
-    console.log('latitude: ' + coord.latitude)
-
+socket.on('location', (location) => {
+    console.log(location)
 })

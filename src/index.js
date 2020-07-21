@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendLocation', (coord) => {
-        socket.broadcast.emit('location', coord)
+        socket.broadcast.emit('location', 'https://www.google.com/maps?q='+coord.latitude+','+coord.longitude)
     })
 })
 
