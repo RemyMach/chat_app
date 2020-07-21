@@ -8,7 +8,11 @@ form.addEventListener('submit', (e) => {
     e.preventDefault()
     //pour récupérer l'input depuis son name message
     const message = e.target.elements.message.value
-    socket.emit('sendMessage', message)
+    // le troisième argument représente l'accusé de réception
+    // message reception représente le message envoyé par le serveur pour l'accusé de réception
+    socket.emit('sendMessage', message, (messageReception) => {
+        console.log('the message has been delivered', messageReception)
+    })
 })
 
 document.querySelector("#send-location").addEventListener('click', () => {

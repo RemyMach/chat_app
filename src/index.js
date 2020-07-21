@@ -32,8 +32,10 @@ io.on('connection', (socket) => {
     // qui vient de se connecter donc celui qui correspond à Socket
     socket.broadcast.emit('message', 'A new User has joined!')
 
-    socket.on('sendMessage', (message) => {
+    //on setup un callback pour l'accusé de réception coté client pour SendMessage
+    socket.on('sendMessage', (message, callback) => {
         io.emit('messageUpdated', message)
+        callback('Delivered !')
     })
 
     // déclencher un événement quand un client se deconnecte
