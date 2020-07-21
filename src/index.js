@@ -28,8 +28,17 @@ io.on('connection', (socket) => {
 
     socket.emit('welcome', 'Welcome !')
 
+    // pour envoyer un message à tous les utilisateurs sauf l'utilisateur
+    // qui vient de se connecter donc celui qui correspond à Socket
+    socket.broadcast.emit('message', 'A new User has joined!')
+
     socket.on('sendMessage', (message) => {
         io.emit('messageUpdated', message)
+    })
+
+    // déclencher un événement quand un client se deconnecte
+    socket.on('disconnect', () => {
+        io.emit('message', 'a user has left')
     })
 })
 

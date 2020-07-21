@@ -19,3 +19,7 @@ socket.on('welcome', (message) => {
 socket.on('messageUpdated', (message) => {
     console.log(message)
 })
+
+socket.on('message', (message) => {
+    console.log(message)
+})
