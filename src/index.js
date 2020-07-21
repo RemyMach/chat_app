@@ -16,8 +16,15 @@ const port = process.env.PORT || 3000
 const publicDirectoryPath = path.join(__dirname, '../public/')
 app.use('/',express.static(publicDirectoryPath))
 
-io.on('connection', () => {
+let count = 0
+
+// message qui appartaitra à chaque fois que un nouveau client 
+// se connecte au serveur
+io.on('connection', (socket) => {
     console.log('connection')
+
+    // envoyer des informations au client
+    socket.emit('countUpdated')
 })
 
 app.get('/', (req, res) => {
