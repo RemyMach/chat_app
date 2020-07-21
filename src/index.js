@@ -1,7 +1,11 @@
 const express = require('express')
 const path = require('path')
+const http = require('http')
+const socketio = require('socket.io')
 
 const app = express()
+// quand on ne le fait pas, c'est quelque chose qui est fait en back
+const server = http.createServer(app)
 
 app.use(express.json())
 const port = process.env.PORT || 3000
@@ -14,6 +18,6 @@ app.get('/', (req, res) => {
     res.render('html/index.html')
 })
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
