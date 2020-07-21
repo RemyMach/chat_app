@@ -24,7 +24,8 @@ io.on('connection', (socket) => {
     console.log('connection')
 
     // envoyer des informations au client
-    socket.emit('countUpdated')
+    // avec l'argument count
+    socket.emit('countUpdated', count)
 })
 
 app.get('/', (req, res) => {
