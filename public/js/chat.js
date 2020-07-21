@@ -1,19 +1,14 @@
 const socket = io()
 
-// quand le message est rendu cela veut dire que le serveur
-// envoit des informations au client
-// count est passé en deuxième arg dans le serveur
-// socket.on('countUpdated', (count) => {
-
-//     console.log('the count has been updated! ' + count)
-// })
 const field = document.querySelector("#message-text")
 const form = document.querySelector('#message-form')
 
 form.addEventListener('submit', (e) => {
     // empêcher le formulaire de s'envoyer
     e.preventDefault()
-    socket.emit('sendMessage', field.value)
+    //pour récupérer l'input depuis son name message
+    const message = e.target.elements.message.value
+    socket.emit('sendMessage', message)
 })
 
 
