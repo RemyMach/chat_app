@@ -18,15 +18,21 @@ app.use('/',express.static(publicDirectoryPath))
 
 let count = 0
 
+// server (emit) an event -> client (receive) - countUpdated
+// client (emit) an event -> server (receive) - increment
+
 // message qui appartaitra à chaque fois que un nouveau client 
 // se connecte au serveur
 io.on('connection', (socket) => {
     console.log('connection')
 
-    // envoyer des informations au client
-    // avec l'argument count
-    socket.emit('countUpdated', count)
+    socket.emit('welcome', 'Welcome !')
+
+    socket.on('sendMessage', (message) => {
+        io.emit('messageUpdated', message)
+    })
 })
+
 
 app.get('/', (req, res) => {
     res.render('html/index.html')
