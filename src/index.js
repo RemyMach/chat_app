@@ -40,6 +40,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         io.emit('message', 'a user has left')
     })
+
+    socket.on('sendLocation', (coord) => {
+        socket.broadcast.emit('location', coord)
+    })
 })
 
 

@@ -11,6 +11,20 @@ form.addEventListener('submit', (e) => {
     socket.emit('sendMessage', message)
 })
 
+document.querySelector("#send-location").addEventListener('click', () => {
+    if (!navigator.geolocation){
+        return alert('Geolocation is not support by your browser')
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        const coord = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        }
+
+        socket.emit('sendLocation', coord)
+    })
+})
 
 socket.on('welcome', (message) => {
     console.log(message)
@@ -22,4 +36,10 @@ socket.on('messageUpdated', (message) => {
 
 socket.on('message', (message) => {
     console.log(message)
+})
+
+socket.on('location', (coord) => {
+    console.log('longitude: ' + coord.longitude)
+    console.log('latitude: ' + coord.latitude)
+
 })
