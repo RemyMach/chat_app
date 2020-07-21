@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const http = require('http')
 const socketio = require('socket.io')
+const Filter = require('bad-words')
 
 const app = express()
 // quand on ne le fait pas, c'est quelque chose qui est fait en back
@@ -34,8 +35,13 @@ io.on('connection', (socket) => {
 
     //on setup un callback pour l'accusé de réception coté client pour SendMessage
     socket.on('sendMessage', (message, callback) => {
+
+        const filter = new Filter()
+        if (filter.isProfane(message)){
+            return callback('bad-words is not allow')
+        }
         io.emit('messageUpdated', message)
-        callback('Delivered !')
+        callback()
     })
 
     // déclencher un événement quand un client se deconnecte
@@ -43,8 +49,9 @@ io.on('connection', (socket) => {
         io.emit('message', 'a user has left')
     })
 
-    socket.on('sendLocation', (coord) => {
+    socket.on('sendLocation', (coord, callback) => {
         socket.broadcast.emit('location', 'https://www.google.com/maps?q='+coord.latitude+','+coord.longitude)
+        callback()
     })
 })
 

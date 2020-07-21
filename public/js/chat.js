@@ -10,8 +10,12 @@ form.addEventListener('submit', (e) => {
     const message = e.target.elements.message.value
     // le troisième argument représente l'accusé de réception
     // message reception représente le message envoyé par le serveur pour l'accusé de réception
-    socket.emit('sendMessage', message, (messageReception) => {
-        console.log('the message has been delivered', messageReception)
+    // messgaeRecpetion est maintenant error
+    socket.emit('sendMessage', message, (error) => {
+        if (error) {
+            return console.log(error)
+        }
+        console.log('the message has been delivered')
     })
 })
 
@@ -26,7 +30,9 @@ document.querySelector("#send-location").addEventListener('click', () => {
             longitude: position.coords.longitude
         }
 
-        socket.emit('sendLocation', coord)
+        socket.emit('sendLocation', coord, () => {
+            console.log('the location has been shared!')
+        })
     })
 })
 
