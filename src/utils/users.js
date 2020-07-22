@@ -65,35 +65,35 @@ const getUsersInRoom = (room) => {
 //    return result
 }
 
-addUser({
-    id: 22,
-    username: 'Andrew  ',
-    room: '  South Philly'
-})
+// addUser({
+//     id: 22,
+//     username: 'Andrew  ',
+//     room: '  South Philly'
+// })
 
-addUser({
-    id: 12,
-    username: 'jean',
-    room: 'ici'
-})
+// addUser({
+//     id: 12,
+//     username: 'jean',
+//     room: 'ici'
+// })
 
-addUser({
-    id: 1,
-    username: 'imotepe',
-    room: 'ici'
-})
+// addUser({
+//     id: 1,
+//     username: 'imotepe',
+//     room: 'ici'
+// })
 
-console.log(getUser(12))
+// console.log(getUser(12))
 
-console.log(getUsersInRoom('ici'))
+// console.log(getUsersInRoom('ici'))
 
 
-console.log(users)
+// console.log(users)
 
-const removedUser = removeUser(22)
+// const removedUser = removeUser(22)
 
-console.log(removedUser)
-console.log(users)
+// console.log(removedUser)
+// console.log(users)
 
 module.exports = {
     addUser,

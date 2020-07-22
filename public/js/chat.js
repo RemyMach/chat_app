@@ -62,8 +62,9 @@ document.querySelector("#send-location").addEventListener('click', (button_locat
 })
 
 socket.on('welcome', (message) => {
-    console.log(message)
+    
     const html = Mustache.render(messageTemplate, {
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
     })
@@ -71,8 +72,9 @@ socket.on('welcome', (message) => {
 })
 
 socket.on('messageUpdated', (message) => {
-    console.log(message)
+
     const html = Mustache.render(messageTemplate, {
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
     })
@@ -89,6 +91,7 @@ socket.on('message', (message) => {
 socket.on('location', (location) => {
     console.log(location)
     const html = Mustache.render(linkTemplate, {
+        username: location.username,
         location: location.url,
         createdAt: moment(location.createdAt).format('h:mm a')
     })
@@ -97,6 +100,7 @@ socket.on('location', (location) => {
 
 socket.on('disconnect', (message) => {
     const html = Mustache.render(messageTemplate, {
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
     })

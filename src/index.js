@@ -55,12 +55,17 @@ io.on('connection', (socket) => {
     //on setup un callback pour l'accusé de réception coté client pour SendMessage
     socket.on('sendMessage', (message, callback) => {
 
-        const filter = new Filter()
-        if (filter.isProfane(message)){
-            return callback('bad-words is not allow')
+        const user = getUser(socket.id)
+        if (user){
+            const filter = new Filter()
+            if (filter.isProfane(message)){
+                return callback('bad-words is not allow')
+            }
+            io.to(user.room).emit('messageUpdated', generateMessage(message, user.username))
+            callback()
         }
-        io.emit('messageUpdated', generateMessage(message))
-        callback()
+
+        callback('error when rendering message')
     })
 
     // déclencher un événement quand un client se deconnecte
@@ -72,8 +77,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendLocation', (coord, callback) => {
-        socket.broadcast.emit('location', generateLocationMessage('https://www.google.com/maps?q='+coord.latitude+','+coord.longitude))
-        callback()
+
+        const user = getUser(socket.id)
+        if (user){
+            socket.to(user.room).emit('location', generateLocationMessage(user.username, 'https://www.google.com/maps?q='+coord.latitude+','+coord.longitude))
+            callback()
+        }
+        callback('erreur quand on a rendu la localisation')
     })
 })
 
