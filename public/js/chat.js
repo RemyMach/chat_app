@@ -9,6 +9,10 @@ const messages = document.querySelector('#messages')
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const linkTemplate = document.querySelector('#link-template').innerHTML
 
+// options
+// récupère tout ce qui est passée dans l'url
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
 form.addEventListener('submit', (e) => {
     // empêcher le formulaire de s'envoyer
     e.preventDefault()
@@ -92,5 +96,11 @@ socket.on('location', (location) => {
 })
 
 socket.on('disconnect', (message) => {
-    console.log(message.text)
+    const html = Mustache.render(messageTemplate, {
+        message: message.text,
+        createdAt: moment(message.createdAt).format('h:mm a')
+    })
+    messages.insertAdjacentHTML('beforeend', html)
 })
+
+socket.emit('join', {username, room})

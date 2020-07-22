@@ -28,11 +28,19 @@ let count = 0
 io.on('connection', (socket) => {
     console.log('connection')
 
-    socket.emit('welcome', generateMessage('Welcome !'))
+    socket.on('join', ({username, room}) => {
+        // permet de créer des room, et de faire rejoindre le client dans la room
+        socket.join(room)
+
+        socket.emit('welcome', generateMessage('Welcome!'))
+        //envoie l'evénement à tous les cleints dans la room sauf le client qui a join
+        socket.broadcast.to(room).emit('welcome', generateMessage(`${username} has joined`))
+    })
+    //socket.emit('welcome', generateMessage('Welcome !'))
 
     // pour envoyer un message à tous les utilisateurs sauf l'utilisateur
     // qui vient de se connecter donc celui qui correspond à Socket
-    socket.broadcast.emit('welcome', generateMessage('A new User has joined!'))
+    //socket.broadcast.emit('welcome', generateMessage('A new User has joined!'))
 
     //on setup un callback pour l'accusé de réception coté client pour SendMessage
     socket.on('sendMessage', (message, callback) => {
