@@ -42,6 +42,29 @@ const removeUser = (id) => {
     }
 }
 
+const getUser = (id) => {
+
+    return users.find((user) => user.id === id)
+        // équivaut à
+        // if (user.id === id){
+        //     return user
+        // }
+}
+
+const getUsersInRoom = (room) => {
+
+    return users.filter((user) => user.room === room)
+    // équivaut à
+//     result = []
+//     const usersRoom = users.find((user) => {
+//         if (user.room === room){
+//             result.push(user)
+//         }
+//     })
+
+//    return result
+}
+
 addUser({
     id: 22,
     username: 'Andrew  ',
@@ -54,9 +77,27 @@ addUser({
     room: 'ici'
 })
 
+addUser({
+    id: 1,
+    username: 'imotepe',
+    room: 'ici'
+})
+
+console.log(getUser(12))
+
+console.log(getUsersInRoom('ici'))
+
+
 console.log(users)
 
 const removedUser = removeUser(22)
 
 console.log(removedUser)
 console.log(users)
+
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
+}

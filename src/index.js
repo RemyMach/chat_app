@@ -3,7 +3,13 @@ const path = require('path')
 const http = require('http')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
-const { generateMessage, generateLocationMessage } = require('./utils/messages.js')
+const { generateMessage, generateLocationMessage } = require('./utils/messages')
+const {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
+} = require('./utils/users')
 
 const app = express()
 // quand on ne le fait pas, c'est quelque chose qui est fait en back
@@ -28,13 +34,17 @@ let count = 0
 io.on('connection', (socket) => {
     console.log('connection')
 
-    socket.on('join', ({username, room}) => {
+    socket.on('join', ({username, room}, callback) => {
+        const { error, user } = addUser({ id: socket.id, username, room})
+        if(error){
+            return callback(error)
+        }
         // permet de créer des room, et de faire rejoindre le client dans la room
-        socket.join(room)
+        socket.join(user.room)
 
         socket.emit('welcome', generateMessage('Welcome!'))
         //envoie l'evénement à tous les cleints dans la room sauf le client qui a join
-        socket.broadcast.to(room).emit('welcome', generateMessage(`${username} has joined`))
+        socket.broadcast.to(user.room).emit('welcome', generateMessage(`${user.username} has joined`))
     })
     //socket.emit('welcome', generateMessage('Welcome !'))
 
@@ -55,7 +65,10 @@ io.on('connection', (socket) => {
 
     // déclencher un événement quand un client se deconnecte
     socket.on('disconnect', () => {
-        io.emit('disconnect', generateMessage('a user has left'))
+        const user = removeUser(socket.id)
+        if(user){
+            io.to(user.room).emit('disconnect', generateMessage(`${user.username} has left the room ${user.room}`))
+        }
     })
 
     socket.on('sendLocation', (coord, callback) => {
