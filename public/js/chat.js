@@ -17,6 +17,9 @@ form.addEventListener('submit', (e) => {
     socket.emit('sendMessage', message, (error) => {
         
         button.removeAttribute('disabled')
+        field.value = ''
+        // mettre le focus sur le bouton
+        field.focus()
         //enable button
 
         if (error) {
@@ -26,10 +29,13 @@ form.addEventListener('submit', (e) => {
     })
 })
 
-document.querySelector("#send-location").addEventListener('click', () => {
+document.querySelector("#send-location").addEventListener('click', (button_location) => {
+        
     if (!navigator.geolocation){
         return alert('Geolocation is not support by your browser')
     }
+
+    button_location.srcElement.setAttribute('disabled', 'disabled')
 
     navigator.geolocation.getCurrentPosition((position) => {
         const coord = {
@@ -38,6 +44,8 @@ document.querySelector("#send-location").addEventListener('click', () => {
         }
 
         socket.emit('sendLocation', coord, () => {
+
+            button_location.srcElement.removeAttribute('disabled')
             console.log('the location has been shared!')
         })
     })
