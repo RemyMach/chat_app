@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
 
     // pour envoyer un message à tous les utilisateurs sauf l'utilisateur
     // qui vient de se connecter donc celui qui correspond à Socket
-    socket.broadcast.emit('message', 'A new User has joined!')
+    socket.broadcast.emit('welcome', 'A new User has joined!')
 
     //on setup un callback pour l'accusé de réception coté client pour SendMessage
     socket.on('sendMessage', (message, callback) => {
@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
 
     // déclencher un événement quand un client se deconnecte
     socket.on('disconnect', () => {
-        io.emit('message', 'a user has left')
+        io.emit('disconnect', 'a user has left')
     })
 
     socket.on('sendLocation', (coord, callback) => {

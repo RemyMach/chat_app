@@ -3,6 +3,10 @@ const socket = io()
 const field = document.querySelector("#message-text")
 const form = document.querySelector('#message-form')
 const button = form.querySelector('button')
+const messages = document.querySelector('#messages')
+
+//template js
+const messageTemplate = document.querySelector('#message-template').innerHTML
 
 form.addEventListener('submit', (e) => {
     // empêcher le formulaire de s'envoyer
@@ -16,6 +20,8 @@ form.addEventListener('submit', (e) => {
     // messgaeRecpetion est maintenant error
     socket.emit('sendMessage', message, (error) => {
         
+        const html = Mustache.render(messageTemplate)
+        messages.insertAdjacentHTML('beforeend', html)
         button.removeAttribute('disabled')
         field.value = ''
         // mettre le focus sur le bouton
@@ -53,6 +59,8 @@ document.querySelector("#send-location").addEventListener('click', (button_locat
 
 socket.on('welcome', (message) => {
     console.log(message)
+    const html = Mustache.render(messageTemplate)
+    messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('messageUpdated', (message) => {
@@ -61,8 +69,14 @@ socket.on('messageUpdated', (message) => {
 
 socket.on('message', (message) => {
     console.log(message)
+    const html = Mustache.render(messageTemplate)
+    messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('location', (location) => {
     console.log(location)
+})
+
+socket.on('disconnect', (message) => {
+    console.log(message)
 })
