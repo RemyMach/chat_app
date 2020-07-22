@@ -7,6 +7,7 @@ const messages = document.querySelector('#messages')
 
 //template js
 const messageTemplate = document.querySelector('#message-template').innerHTML
+const linkTemplate = document.querySelector('#link-template').innerHTML
 
 form.addEventListener('submit', (e) => {
     // empêcher le formulaire de s'envoyer
@@ -20,7 +21,9 @@ form.addEventListener('submit', (e) => {
     // messgaeRecpetion est maintenant error
     socket.emit('sendMessage', message, (error) => {
         
-        const html = Mustache.render(messageTemplate)
+        const html = Mustache.render(messageTemplate, {
+            message
+        })
         messages.insertAdjacentHTML('beforeend', html)
         button.removeAttribute('disabled')
         field.value = ''
@@ -59,7 +62,9 @@ document.querySelector("#send-location").addEventListener('click', (button_locat
 
 socket.on('welcome', (message) => {
     console.log(message)
-    const html = Mustache.render(messageTemplate)
+    const html = Mustache.render(messageTemplate, {
+        message: 'Welcome!!'
+    })
     messages.insertAdjacentHTML('beforeend', html)
 })
 
@@ -73,8 +78,13 @@ socket.on('message', (message) => {
     messages.insertAdjacentHTML('beforeend', html)
 })
 
+
 socket.on('location', (location) => {
     console.log(location)
+    const html = Mustache.render(linkTemplate, {
+        location
+    })
+    messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('disconnect', (message) => {
