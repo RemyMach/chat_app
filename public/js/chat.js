@@ -2,16 +2,23 @@ const socket = io()
 
 const field = document.querySelector("#message-text")
 const form = document.querySelector('#message-form')
+const button = form.querySelector('button')
 
 form.addEventListener('submit', (e) => {
     // empêcher le formulaire de s'envoyer
     e.preventDefault()
+
+    button.setAttribute('disabled', 'disabled')
     //pour récupérer l'input depuis son name message
     const message = e.target.elements.message.value
     // le troisième argument représente l'accusé de réception
     // message reception représente le message envoyé par le serveur pour l'accusé de réception
     // messgaeRecpetion est maintenant error
     socket.emit('sendMessage', message, (error) => {
+        
+        button.removeAttribute('disabled')
+        //enable button
+
         if (error) {
             return console.log(error)
         }
