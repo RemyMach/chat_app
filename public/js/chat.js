@@ -21,10 +21,7 @@ form.addEventListener('submit', (e) => {
     // messgaeRecpetion est maintenant error
     socket.emit('sendMessage', message, (error) => {
         
-        const html = Mustache.render(messageTemplate, {
-            message
-        })
-        messages.insertAdjacentHTML('beforeend', html)
+    
         button.removeAttribute('disabled')
         field.value = ''
         // mettre le focus sur le bouton
@@ -63,13 +60,19 @@ document.querySelector("#send-location").addEventListener('click', (button_locat
 socket.on('welcome', (message) => {
     console.log(message)
     const html = Mustache.render(messageTemplate, {
-        message: 'Welcome!!'
+        message: message.text,
+        createdAt: message.createdAt
     })
     messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('messageUpdated', (message) => {
     console.log(message)
+    const html = Mustache.render(messageTemplate, {
+        message: message.text,
+        createdAt: message.createdAt
+    })
+    messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('message', (message) => {
@@ -82,11 +85,12 @@ socket.on('message', (message) => {
 socket.on('location', (location) => {
     console.log(location)
     const html = Mustache.render(linkTemplate, {
-        location
+        location,
+        createdAt: 0000
     })
     messages.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('disconnect', (message) => {
-    console.log(message)
+    console.log(message.text)
 })

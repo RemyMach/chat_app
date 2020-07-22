@@ -3,6 +3,7 @@ const path = require('path')
 const http = require('http')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
+const { generateMessage } = require('./utils/messages.js')
 
 const app = express()
 // quand on ne le fait pas, c'est quelque chose qui est fait en back
@@ -27,11 +28,11 @@ let count = 0
 io.on('connection', (socket) => {
     console.log('connection')
 
-    socket.emit('welcome', 'Welcome !')
+    socket.emit('welcome', generateMessage('Welcome !'))
 
     // pour envoyer un message à tous les utilisateurs sauf l'utilisateur
     // qui vient de se connecter donc celui qui correspond à Socket
-    socket.broadcast.emit('welcome', 'A new User has joined!')
+    socket.broadcast.emit('welcome', generateMessage('A new User has joined!'))
 
     //on setup un callback pour l'accusé de réception coté client pour SendMessage
     socket.on('sendMessage', (message, callback) => {
@@ -40,13 +41,13 @@ io.on('connection', (socket) => {
         if (filter.isProfane(message)){
             return callback('bad-words is not allow')
         }
-        io.emit('messageUpdated', message)
+        io.emit('messageUpdated', generateMessage(message))
         callback()
     })
 
     // déclencher un événement quand un client se deconnecte
     socket.on('disconnect', () => {
-        io.emit('disconnect', 'a user has left')
+        io.emit('disconnect', generateMessage('a user has left'))
     })
 
     socket.on('sendLocation', (coord, callback) => {
