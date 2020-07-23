@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
 
         const user = getUser(socket.id)
         if (user){
-            socket.to(user.room).emit('location', generateLocationMessage(user.username, 'https://www.google.com/maps?q='+coord.latitude+','+coord.longitude))
+            io.to(user.room).emit('location', generateLocationMessage(user.username, 'https://www.google.com/maps?q='+coord.latitude+','+coord.longitude))
             callback()
         }
         callback('erreur quand on a rendu la localisation')
