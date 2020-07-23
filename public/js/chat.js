@@ -10,6 +10,32 @@ const messageTemplate = document.querySelector('#message-template').innerHTML
 const linkTemplate = document.querySelector('#link-template').innerHTML
 const siedbarTemplate = document.querySelector('#sidebar-template').innerHTML
 
+const autoscroll = () => {
+    // New message element
+    const $newMessage = messages.lastElementChild
+
+    //Height of the new message
+    const newMessageStyles = getComputedStyle($newMessage)
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+    // visible height
+    const visibleHeight = messages.offsetHeight
+
+    // height of messages container
+    const containerHeight = messages.scrollHeight
+
+    // How far have I scrolled?
+    const scrollOffset = messages.scrollTop + visibleHeight
+
+    // on vérifie que la bar de scroll etait bien en bas si on veut scroll
+    // car sinon on regardait l'historique des messages et on ne veut pas être ramené en bas
+    if (containerHeight - newMessageHeight <= scrollOffset){
+        messages.scrollTop = messages.scrollHeight
+    }
+
+    //console.log(newMessageStyles)
+}
 
 // options
 // récupère tout ce qui est passée dans l'url
@@ -81,12 +107,14 @@ socket.on('messageUpdated', (message) => {
         createdAt: moment(message.createdAt).format('h:mm a')
     })
     messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 socket.on('message', (message) => {
     console.log(message)
     const html = Mustache.render(messageTemplate)
     messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 
@@ -98,6 +126,8 @@ socket.on('location', (location) => {
         createdAt: moment(location.createdAt).format('h:mm a')
     })
     messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
+
 })
 
 socket.on('disconnect', (message) => {
@@ -122,5 +152,4 @@ socket.on('roomData', ({room, users}) => {
         users
     })
     document.querySelector('#sidebar').innerHTML = html
-
 })
