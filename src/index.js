@@ -34,6 +34,7 @@ let count = 0
 io.on('connection', (socket) => {
     console.log('connection')
 
+    // Un client se connecte au serveur
     socket.on('join', ({username, room}, callback) => {
         const { error, user } = addUser({ id: socket.id, username, room})
         if(error){
@@ -45,6 +46,12 @@ io.on('connection', (socket) => {
         socket.emit('welcome', generateMessage('Welcome!'))
         //envoie l'evénement à tous les cleints dans la room sauf le client qui a join
         socket.broadcast.to(user.room).emit('welcome', generateMessage(`${user.username} has joined`))
+
+        // transmet la liste d'users
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        })
     })
     //socket.emit('welcome', generateMessage('Welcome !'))
 
@@ -68,11 +75,17 @@ io.on('connection', (socket) => {
         callback('error when rendering message')
     })
 
+    // Un client se déconnecte du serveur
     // déclencher un événement quand un client se deconnecte
     socket.on('disconnect', () => {
         const user = removeUser(socket.id)
         if(user){
             io.to(user.room).emit('disconnect', generateMessage(`${user.username} has left the room ${user.room}`))
+             // transmet la liste de users
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room)
+        })
         }
     })
 

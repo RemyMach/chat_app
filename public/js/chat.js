@@ -8,6 +8,8 @@ const messages = document.querySelector('#messages')
 //template js
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const linkTemplate = document.querySelector('#link-template').innerHTML
+const siedbarTemplate = document.querySelector('#sidebar-template').innerHTML
+
 
 // options
 // récupère tout ce qui est passée dans l'url
@@ -62,7 +64,7 @@ document.querySelector("#send-location").addEventListener('click', (button_locat
 })
 
 socket.on('welcome', (message) => {
-    
+
     const html = Mustache.render(messageTemplate, {
         username: message.username,
         message: message.text,
@@ -112,4 +114,13 @@ socket.emit('join', {username, room}, (error) => {
         alert(error)
         location.href = '/'
     }
+})
+
+socket.on('roomData', ({room, users}) => {
+    const html = Mustache.render(siedbarTemplate, {
+        room,
+        users
+    })
+    document.querySelector('#sidebar').innerHTML = html
+
 })
